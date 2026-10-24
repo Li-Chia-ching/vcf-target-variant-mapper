@@ -1,0 +1,10 @@
+# vcf-target-variant-mapper v2.0 — Python 依赖
+# 原 VCF 映射链 + 多性状共有基因发现模块共用
+pandas>=2.0
+numpy>=1.24
+scipy>=1.10
+pyyaml>=6.0
+biopython>=1.81        # align_and_diff.py / map_missense_to_protein.py
+cyvcf2>=0.30           # extract_target_gene_variants.py
+matplotlib>=3.7        # legend_and_panel.py
+pillow>=10.0           # legend_and_panel.py 拼版

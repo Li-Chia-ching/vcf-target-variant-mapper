@@ -1,0 +1,41 @@
+Package: vcfTargetVariantMapper.multitrait
+Type: Dependency manifest
+Title: R Dependencies for vcf-target-variant-mapper v2.0 Multitrait Gene Discovery
+Version: 2.0.0
+Authors@R: person("vcf-target-variant-mapper", role = c("aut", "cre"))
+Description: Declares the R package dependencies for the modules/multitrait_gene_discovery
+    pipeline (run_coloc.R). Install order matters: RcppEigen is PINNED to 0.3.3.9.3
+    for hyprcoloc (jrs95/hyprcoloc) compatibility. Colocalization engines:
+    colocboost (StatFunGen/colocboost) as primary, HyPrColoc (jrs95/hyprcoloc) as
+    backup, POEMColoc for truncated/top-SNP data degradation path.
+License: MIT
+Depends:
+    R (>= 4.2.0)
+Imports:
+    yaml (>= 2.3),
+    data.table
+Suggests:
+    coloc (>= 6.0),
+    susieR,
+    remotes,
+    Rcpp,
+    Matrix,
+    Rmpfr,
+    iterpc,
+    knitr,
+    rmarkdown,
+    pheatmap,
+    RColorBrewer
+Encoding: UTF-8
+Additional_repositories: https://github.com/StatFunGen/colocboost, https://github.com/jrs95/hyprcoloc
+X-RcppEigen-Pin: 0.3.3.9.3
+X-Install-Notes: |
+  # 1) 锁定 RcppEigen 版本（hyprcoloc 编译要求 0.3.3.9.3；不影响 colocboost/susieR/coloc/POEMColoc）
+  remotes::install_version("RcppEigen", version = "0.3.3.9.3",
+                           repos = "https://cran.r-project.org")
+  # 2) 共定位引擎（按需）
+  remotes::install_github("StatFunGen/colocboost")        # 主引擎
+  remotes::install_github("jrs95/hyprcoloc", upgrade = "never")   # 备选（RcppEigen 0.3.3.9.3）
+  BiocManager::install(c("SeqArray", "SeqVarTools"))      # POEMColoc 前置
+  remotes::install_github("AbbVie-ComputationalGenomics/POEMColoc")
+  install.packages(c("coloc", "susieR", "yaml"))

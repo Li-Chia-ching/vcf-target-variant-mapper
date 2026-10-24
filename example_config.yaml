@@ -1,0 +1,63 @@
+# =============================================================================
+# example_config.yaml — vcf-target-variant-mapper v2.0 多性状共有基因发现 示例配置
+# =============================================================================
+# 用法：
+#   python modules/multitrait_gene_discovery/run_magma_multitrait.py \
+#       --sumstats ... --trait-names ... --genes ... --out-prefix ... \
+#       --config example_config.yaml
+#   Rscript modules/multitrait_gene_discovery/run_coloc.R \
+#       --panels-dir ... --traits PH,MF,SH --out-prefix ... \
+#       --config example_config.yaml
+# 所有路径相对当前工作目录；命令行参数优先级高于本文件。
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# 数据模式：auto（自动检测）| complete（强制完整）| truncated（强制截断）
+# ---------------------------------------------------------------------------
+data_mode: auto
+
+truncation_detection:
+  p_trunc: 1.0e-5          # 数据方截断阈值（华智生物 = 1e-5）
+  tolerance: 1.5           # max(p) <= p_trunc * tolerance 判为截断
+  warn: true               # 截断时是否输出醒目警告框
+
+# ---------------------------------------------------------------------------
+# 方法 A：geneGPS 概念（GPS-N/GPS-M）+ MAGMA 基因级多性状联合
+# ---------------------------------------------------------------------------
+gene_window:
+  upstream_kb: 2           # 基因窗口上游 2 kb
+  downstream_kb: 1         # 基因窗口下游 1 kb
+
+magma:
+  binary: ""               # MAGMA 可执行文件路径；留空则自动在 PATH 搜索
+  engine: auto             # auto（缺失时内置 emulated 近似）| magma（强制要求真二进制）| emulated
+  bfile: ""                # 可选：参考基因型 --bfile 前缀（LD 校正用，强烈建议提供）
+  model: ""                # 留空 = MAGMA 默认 snp-wise=mean
+
+min_snps_per_gene: 1
+n_per_trait:               # 每性状样本量（MAGMA N 参数）
+  total: 212
+
+# ---------------------------------------------------------------------------
+# 方法 B：贝叶斯共定位（colocboost 主 / HyPrColoc 备 / POEMColoc 降级）
+# ---------------------------------------------------------------------------
+method_b:
+  primary: colocboost      # colocboost | hyprcoloc
+  pp4_threshold: 0.8       # PP.H4（或等价后验）通过阈值
+  susie: false             # true 时对完整数据区间补跑 coloc.susie（需 LD）
+  truncation:
+    action: auto
+    # 截断数据降级路径（铁律：不得静默运行贝叶斯共定位）：
+    #   warn     — (a) 明确警告 + 建议获取完整区域统计，分析中止
+    #   poemcoloc— (b) LD 充分时改用 POEMColoc（面向 top-SNP 数据）
+    #   skip     — (c) 跳过 coloc，方法 A 评分作为主要证据
+    #   auto     — 有充分 LD 走 (b)，否则走 (a)
+
+# ---------------------------------------------------------------------------
+# 功能优先级排序
+# ---------------------------------------------------------------------------
+functional:
+  homologs: ""             # 同源映射表（gene_id, hit_id, hit_desc, pident, evalue）
+  gene_desc: ""            # 基因注释表（gene_id, description, pfams）
+  # 分类正则内置（TE 剔除 / 未知功能剔除 / GA·IAA·叶片发育·细胞分裂·GRAS·TCP·WOX 优先），
+  # 与 modules/multitrait_gene_discovery/functional_prioritization.py 顶部常量一致。
