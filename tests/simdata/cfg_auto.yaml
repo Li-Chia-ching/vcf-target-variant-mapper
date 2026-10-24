@@ -1,0 +1,10 @@
+truncation_detection:
+  p_trunc: 1.0e-5
+  tolerance: 1.5
+method_b:
+  primary: colocboost
+  pp4_threshold: 0.8
+  truncation:
+    action: auto
+n_per_trait:
+  total: 212

@@ -1,0 +1,13 @@
+truncation_detection:
+  p_trunc: 1.0e-5
+  tolerance: 1.5
+gene_window:
+  upstream_kb: 2
+  downstream_kb: 1
+magma:
+  binary: "C:/Users/lijia/Documents/WorkBuddy/Gene_family/05_output/vcf-target-variant-mapper/tests/mock_magma.py"
+  engine: auto
+  bfile: ""
+  model: ""
+n_per_trait:
+  total: 212

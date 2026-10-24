@@ -1,0 +1,6 @@
+gene_id	hit_id	hit_desc	pident	evalue	source
+G1_DELLA	LOC_00017224	DELLA protein (gibberellin signaling)	78.5	1e-120	M.truncatula
+G2_KINASE	LOC_00033110	receptor-like protein kinase	65.2	1e-80	M.truncatula
+G3_TE	LOC_00090001	Ty1-copia retrotransposon gag protein	88.0	1e-50	M.truncatula
+G4_UNKNOWN	AT1G00000	hypothetical protein	30.1	2.0	A.thaliana
+G5_TCP	LOC_00021086	TCP transcription factor 4	72.3	1e-90	M.truncatula
